@@ -11,7 +11,7 @@ import json
 import cv2
 import io
 
-url              = "http://192.168.242.60:8080/shot.jpg"
+url              = "http://-.-.-.-:8080/shot.jpg"
 app              = Flask(__name__)
 PREDICTOR_PATH   = "Haarcascades/shape_predictor_68_face_landmarks.dat"
 faceDetector     = dlib.get_frontal_face_detector()
