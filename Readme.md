@@ -28,19 +28,19 @@ Before running the application you should
 ## 1.install IPWebcam application on your phone
 
 ## 2.Set phone camera options
-Open the app, go to the video preferences to set the **Main camera** and the **Video orintation** options to the following:
-If you set the **Main camera** to the **Front camera**, then the **Video orintation** has to be set to **Upside Down Portrait**
-If you set the **Main camera** to the **Primary camera**, then the **Video orintation** has to be set to **Portrait**
+Open the app, go to the video preferences to set the **Main camera** and the **Video orintation** options to the following:<br></br>
+- If you set the **Main camera** to the **Front camera**, then the **Video orintation** has to be set to **Upside Down Portrait**<br></br>
+- If you set the **Main camera** to the **Primary camera**, then the **Video orintation** has to be set to **Portrait**<br></br>
 
 ## 3.IPWebcam start server
-Choose "Start server" option
+Choose **Start server** option
 
 ## 4.Edit IPWebcam url
 Change the url variable in the app.py file into the IPWebcam previewed IPAdresses
-For example:
-    IPWebcam adress: -.-.1.10:8080
-Then the url variable in the app.py should be:
-    url = "http://-.-.1.10:8080/shot.jpg"
+### For example:
+- IPWebcam adress: -.-.1.10:8080
+### Then the url variable in the app.py should be:
+- url = "http://-.-.1.10:8080/shot.jpg"
 
 ## 5.Run IPWebcam in background
-Choose "Run in background" option from the Actions tab on the previewed page
+Choose **Run in background** option from the Actions tab on the previewed page
