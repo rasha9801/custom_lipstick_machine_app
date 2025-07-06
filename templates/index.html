@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+<style>
+    #camera{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+    body {
+        margin: 0px;
+    }
+    .lunchbox {
+        width: 100%;
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        margin-bottom: 50px;
+    }
+    .swiper-container{
+        overflow: hidden;
+    }
+    .swiper-wrapper {
+        width: 75%;
+    }
+    .swiper-wrapper {
+        width: 100%;
+    }
+    .swiper-slide {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    @media screen and (max-width: 1000px) /* for mobile */ {
+        .color {
+            height: 200px;
+            width: 200px;
+        }
+        .order {
+            width: 300px;
+            height: 150px;
+            margin: 50px;
+            font-size: 35px;
+        }
+        #plus{
+            height: 200px;
+            width: 200px;
+        }
+        #choices {
+            height: 300px;
+        }
+        .formContainer{
+            width: 45%;
+            height: 250px;
+            padding: 2%;
+        }
+        .formContainer .btn {
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 30px;
+        }
+        .cancel {
+            width: 10%;
+            font-size: 40px;
+        }
+        .overlay{
+            height: 250px;
+        }
+        .popup{
+            width: 50%;
+            height: 200px;
+            padding: 2%;
+        }
+        .popup h2{
+            font-size: 30px;
+        }
+        .popup .content {
+            font-size: 35px;
+        }
+        .popup .close{
+            font-size: 50px;
+        }
+    }
+    @media screen and (min-width: 1000px)/* for desktop */ {
+        .color {
+            height: 100px;
+            width: 100px;
+            justify-content: space-around; 
+        }
+        .order {
+            width: 150px;
+            height: 75px;
+            margin: 25px;
+            font-size: 17px;
+        }
+        #plus{
+            height: 100px;
+            width: 100px;
+        }
+        #choices {
+            height: 210px;
+        }
+        .formContainer {
+            width: 30%;
+            height: 170px;
+            padding: 1%;
+        }
+        .formContainer .btn {
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        .cancel {
+            width: 5%;
+            font-size: 25px;
+        }
+        .popup{
+            width: 30%;
+            height: 170px;
+            padding: 1%;
+        }
+        .popup .content {
+            font-size: 20px;
+            font-family: initial;
+        }
+        .popup .close{
+            font-size: 30px;
+        }
+    }
+    .color {
+        border: none;
+        border-radius: 25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #input {
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        z-index: -1;
+    }
+    #choosen{
+        border: 5px solid;
+        border-color: cornflowerblue;
+    }
+    #plus{
+        background: transparent;
+    }
+    #choices {
+        position: absolute;
+        width: 100%;
+        margin: auto;
+        top: 50%;
+        bottom: 50%;
+        display: flex;
+        justify-content: center;
+    }
+    .formContainer {
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        background: aliceblue;
+        border-radius: 10px;
+    }
+    .formContainer .btn {
+        border: none;
+        background-color: transparent;
+        color: black;
+        cursor: pointer;
+        width: 100%;
+        border: 1px solid;
+        border-radius: 10px;
+    }
+    .cancel {
+        background-color: transparent;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: flex-end;
+        border: none;
+        font-family: monospace;
+    }        
+    .btn input{
+        opacity: 0;
+        width: 0px;
+        height: 0px;
+    }
+    #cameraBtn{
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 75px;
+    }
+    #cameraBtn button{
+        background: white;
+        border: 5px solid gainsboro
+    }
+    .order{
+        position: absolute;
+        border: none;
+        border-radius: 5px;
+        font-family: Tahoma, Arial, sans-serif;
+        background: rgb(22, 223, 62);
+    }
+    .overlay {
+        width: 100%;
+        height: 200px;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 50%;
+        bottom: 50%;
+    }
+    .overlay:target {
+        visibility: visible;
+        opacity: 1;
+    }
+    .popup {
+        background: #fff;
+        border-radius: 5px;
+        position: absolute;
+    }
+    .popup h2 {
+        margin-top: 15px;
+        color: #333;
+        font-family: Tahoma;
+    }
+    .popup .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-family: monospace;
+    }
+    .popup .content {
+        font-family: initial;
+    }
+    #color-picker{
+        display: inline-block;
+        opacity: 0;
+        width: 0px;
+        height: 0px;
+        padding: 0;
+    }
+</style>
+</head>
+<body>
+<img id="camera" src="{{ url_for('video_feed') }}" width="50%">
+<button class="order" onclick="order()">Order Lipstick</button>
+<div class="lunchbox">
+    <div id="swiper1" class="swiper-container"> 
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <button style = "background: rgb(235, 45, 45);" class="color" onclick="choosen(this);">
+            </div>
+            <div class="swiper-slide">
+                <button  style = "background: rgb(255, 0, 255);" class="color" onclick="choosen(this);">
+            </div>
+            <div class="swiper-slide">
+                <button  style = "background: rgb(236, 34, 118);" class="color" onclick="choosen(this);">
+            </div>
+            <div class="swiper-slide">
+                <button  style = "background: rgb(240, 136, 25);" class="color" onclick="choosen(this);">
+            </div>
+            <div class="swiper-slide">
+                <button  style = "background: rgb(222, 110, 110);" class="color" onclick="choosen(this);">
+            </div>
+                <div class="swiper-slide">
+                <button  style = "background: rgb(243, 169, 104);" class="color" onclick="choosen(this);">
+            </div>
+            <div class="swiper-slide">
+                <button  style = "background: rgb(166, 43, 43);" class="color" onclick="choosen(this);">
+            </div>
+            <div id="plus-div" class="swiper-slide">
+                <button style = "background: rgb(255, 255, 255);" class="color" onclick="openColorWheel(this);">
+                    <input id="color-picker" type="color" onchange="
+                        const color = this.value
+                        const r = parseInt(color.substr(1,2), 16);
+                        const g = parseInt(color.substr(3,2), 16);
+                        const b = parseInt(color.substr(5,2), 16);
+                        var value = '('+ r + ', ' + g + ', ' + b + ')';
+                        addSlider( value );">
+                    <img src="https://img.icons8.com/fluency/96/color-wheel-2.png" style="height: 100%;"/>
+                </button>
+            </div>
+            <div id="plus-div" class="swiper-slide">
+                <button style = "background: rgb(255, 255, 255);" id= "plus" class="color" onclick="openForm();">
+                    <img src="https://img.icons8.com/pastel-glyph/64/plus--v1.png" style="height: 80%;"/>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="cameraBtn" style="display: none;">
+    <button class="color" onclick="screenShot();"></button>
+</div>
+
+<div id="choices" style="display: none;">
+    <div class="formContainer" id="popupForm">
+        <button class="cancel" onclick="closePopup( 'choices' )">X</button>
+        <button class="btn" onclick ="document.getElementById('choices').style.display = 'none';
+                                      document.getElementsByClassName('lunchbox')[0].style.display = 'none';
+                                      document.getElementById('cameraBtn').style.display = 'flex';">
+            Take Picture</button>
+        <button id="browse-btn" class="btn" onclick="document.getElementById('choices').style.display = 'none';
+                                     this.querySelector('#browse').click();">
+            Load Picture
+            <input id="browse" type="file" accept="image/png, image/jpg, image/jpeg" oninput="sendFile(this);">
+        </button>        
+    </div>
+</div>
+
+<div id="popup1" class="overlay" style="display: none;">
+	<div class="popup">
+		<h2>Successfully orderd</h2>
+		<a class="close" onclick="closePopup( 'popup1' );">X</a>
+		<div class="content">
+            Thank you for using the app.
+		</div>
+	</div>
+</div>
+
+<script>
+    var numSlides = 5;
+    var swipe     = false;
+    if( window.innerWidth < 1000 )
+    { 
+        numSlides   = 3;
+        swipe       = true;
+    }
+    const mySwiper = new Swiper ('#swiper1', {
+        slidesPerView: numSlides,
+        centeredSlides: true,
+        roundLengths: true
+    });
+    function order()
+    {
+        var choosed = document.getElementById("choosen");
+        if( choosed === null )
+            return;
+        $.ajax({
+            type: 'POST',
+            url: '/order',
+            success: function() {
+                document.getElementById("popup1").style.display = 'flex';
+                console.log('Successfully orderd');
+            },
+            error: function() {
+                console.log("Oops! Something went wrong.");
+            }
+        });
+    }
+    function openColorWheel( btn )
+    {
+        btn.querySelector('input').click();
+        if( swipe )
+            mySwiper.slideTo(mySwiper.clickedIndex);
+    }
+    function sendFile( element )
+    {
+        var form    = document.createElement('form');
+        var input   = element.cloneNode(true);
+        input.name  = 'img';
+        form.appendChild( input );
+        var formData = new FormData( form );
+        console.log( form );
+        $.ajax({
+            type: 'POST',
+            url: '/processing/file',
+            enctype: 'multipart/form-data',
+            data: formData,
+            contentType:false,
+            cache: false,
+            processData: false,
+            success: function( response ) {
+                console.log('success ' + response);
+                addSlider( response );
+            },
+            error: function() {
+                console.log("Oops! Something went wrong.");
+            }
+        });
+    }
+    function sendImage(img) 
+    {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/jpeg");
+        console.log(dataURL)
+        var value =  dataURL.replace(/^data:image\/jpeg;base64,/, "");
+        console.log(value);
+        $.ajax({
+            type: "POST",
+            url: "/processing/img",
+            data: JSON.stringify( value ),
+            contentType: "application/json; charset=utf-8",
+            success: function( response ) {
+                console.log('Successfully selected '+ response);
+                addSlider( response );
+            },
+            error: function() {
+                console.log("Oops! Something went wrong.");
+            }
+        });
+    }
+    function screenShot()
+    {
+        var img = document.getElementById('camera');
+        document.getElementById('cameraBtn').style.display = 'none';
+        document.getElementsByClassName('lunchbox')[0].style.display = 'flex';
+        sendImage( img );
+    }
+    function choosen(item)
+    {
+        var choosed = document.getElementById("choosen");
+        if( choosed !== null )
+            choosed.removeAttribute('id');
+        item.id     = "choosen";
+        var value   =  item.style.background.substring(4, item.style.background.length-1);
+        value       = value.replaceAll(',' , '');
+        $.ajax({
+            type: 'POST',
+            url: '/divinfo',
+            data: {'yourdiv': value},
+            success: function() {
+                // alert('Successfully selected '+ value);
+                console.log('Successfully selected '+ value);
+            },
+            error: function() {
+                console.log("Oops! Something went wrong.");
+            }
+        });
+        mySwiper.slideTo(mySwiper.clickedIndex); 
+    } 
+    function openForm() {
+        document.getElementById("choices").style.display = "flex";
+        var value = '255 255 255';
+        $.ajax({
+            type: 'POST',
+            url: '/divinfo',
+            data: {'yourdiv': value },
+            success: function() {
+                console.log('Successfully selected '+ value);
+            },
+            error: function() {
+                console.log("Oops! Something went wrong.");
+            }
+        });
+        mySwiper.slideTo(mySwiper.clickedIndex);
+    }
+    function closePopup( id ) {
+        document.getElementById(id).style.display = "none";
+    }
+    function addSlider( value )
+    {
+        var plusDivs    = document.querySelectorAll('#plus-div');
+        var slide       = document.createElement("div");
+        var btn         = document.createElement("button");
+        slide.className = "swiper-slide";
+        btn.className   = "color";
+        btn.style       = "background: rgb" + value;
+        btn.addEventListener('click', function() {
+            choosen(this);
+        });
+        slide.appendChild(btn);
+        mySwiper.appendSlide(slide);
+        for( var i = 0; i< plusDivs.length; i++ )
+            mySwiper.appendSlide(plusDivs[i]);
+        btn.click();
+    }
+</script>
+</body>
+</html>
